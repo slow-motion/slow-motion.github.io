@@ -294,6 +294,8 @@ if __name__ == '__main__':
       
 
       
+        <div id="vlaine-comment"></div>
+      
 
       <footer class="py-12 text-center px-4 md:px-0" v-pre>
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
@@ -483,6 +485,23 @@ if __name__ == '__main__':
     //初始化
     initImg();
   </script>
+  
+    <script type="application/javascript" src="https://unpkg.com/valine"></script>
+<script type="application/javascript">
+  new Valine({
+    el: '#vlaine-comment',
+    appId: 'wMwGNm8qkhsijakCXLFMqkjR-gzGzoHsz',
+    appKey: 'MsKBVkoyrUno9pPS0L1TK2gu',
+    pageSize: 10,
+    notify: true,
+    avatar: 'mp',
+    verify: true,
+    placeholder: '随便说说~',
+    visitor: true,
+    highlight: true,
+    recordIP: false,
+  })
+</script>
   
   
 </body>
