@@ -1,112 +1,389 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gridea</title>
-<link rel="shortcut icon" href="https://slow-motion.github.io/favicon.ico?v=1623745463936">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>skykale</title>
+<link rel="shortcut icon" href="https://slow-motion.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://slow-motion.github.io/media/css/tailwind.css">
 <link rel="stylesheet" href="https://slow-motion.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Gridea - Atom Feed" href="https://slow-motion.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
-
-
-
-    <meta name="description" content="温故而知新" />
-  </head>
-  <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://slow-motion.github.io">
-  <img class="avatar" src="https://slow-motion.github.io/images/avatar.png?v=1623745463936" alt="">
-  </a>
-  <h1 class="site-title">
-    Gridea
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
+<link rel="alternate" type="application/atom+xml" title="skykale - Atom Feed" href="https://slow-motion.github.io/atom.xml">
 
     
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://slow-motion.github.io/post/ruan-jian-gong-cheng-da-zuo-ye/">
-        <h2 class="post-title">软件工程大作业</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-06-15
-        </span>
-        <span>
-          3 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-</div>
 
-    
-        <div class="pagination-container">
-  
-  
-</div>
+  <meta name="description" content="随心而写" />
+</head>
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
 
-    
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://slow-motion.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
-      </div>
+    <div class="nav py-3 md:py-8 fixed w-full z-10 bg-gray-50 dark:bg-gray-700 transition-all duration-300" :class="{ 'scroll': scrolled }">
+  <div class="flex justify-end px-4">
+    <div class="w-8 h-8 flex justify-center items-center rounded-full md:hidden" @click="showMenu = !showMenu">
+      <i class="ri-close-line" v-show="showMenu"></i>
+      <i class="ri-menu-3-line" v-show="!showMenu"></i>
     </div>
-  </body>
+  </div>
+  <nav class="max-w-4xl w-full mx-auto text-center flex flex-col md:flex-row justify-center md:block" :class="`${ showMenu ? 'block' : 'hidden' }`">
+    
+      <a href="/" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        首页
+      </a>
+    
+      <a href="/archives" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        归档
+      </a>
+    
+      <a href="/tags" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        标签
+      </a>
+    
+      <a href="/post/about" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        关于
+      </a>
+    
+    <a href="https://slow-motion.github.io/atom.xml" target="_blank" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+      RSS
+    </a>
+  </nav>
+</div>
+
+    <div class="max-w-4xl w-full mx-auto ">
+      
+        <header class="flex py-16 md:py-32 mt-12 flex-col md:flex-row px-4 md:px-0 animated fadeIn">
+  <div class="flex-1 order-2 md:order-1 md:pr-16">
+    <div class="text-4xl font-bold text-center md:text-left">
+      skykale
+    </div>
+    <div class="text-xl text-gray-500 mt-4 text-center md:text-left">
+      随心而写
+    </div>
+    
+      <div class="mt-8 text-center md:text-left">
+        <a
+          href="/post/about" 
+          arget="_blank"
+          class="text-sm bg-yellow-50 dark:bg-indigo-500 dark:text-gray-700 font-semibold px-4 py-2 inline-block yellow-btn transition-fast rounded"
+        >LET&#39;S TALK!</a>
+      </div>
+    
+    
+      <div class="mt-8 flex items-center">
+        
+          <div class="text-gray-500 mr-2">
+            Follow me 👉
+          </div>
+        
+        
+          
+        
+          
+            
+              <a href="kluo0401@outlook.com" target="_blank" class="mr-2 w-8 h-8 inline-flex items-center justify-center text-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast">
+                <i class="ri-mail-line"></i>
+              </a>
+            
+          
+        
+          
+            
+              <a href="https://github.com/slow-motion" target="_blank" class="mr-2 w-8 h-8 inline-flex items-center justify-center text-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast">
+                <i class="ri-github-line"></i>
+              </a>
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    
+  </div>
+  <div class="md:mx-8 flex-shrink-0 self-start rounded-full border-4 border-dotted border-transparent hover:border-yellow-50 p-2 w-32 h-32 order-1 md:order-2 mx-auto s3-dotted">
+    <img class="rounded-full object-cover" src="https://slow-motion.github.io/images/avatar.png?v=1623746030234" alt="skykale" width="100%" height="100%">
+  </div>
+</header>
+      
+
+      <div class="shadow-box bg-white dark:bg-gray-600 border-gray-300 rounded-none md:rounded-lg -mx-1 md:mx-0 md:px-0">
+        
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://slow-motion.github.io/post/ruan-jian-she-ji-shuo-ming/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          VGG 网络利用迁移学习复现
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-06-15</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        <h2 id="1-简介">1. 简介</h2>
+<p>​	虽然 AlexNet 证明深层神经网络卓有成效，但它没有提供一个通用的模板来指导后续的研究人员设计新的网络。 在下面的几个章节中，我们将介绍一些常用于设计深层神经网络的启发式概念。</p>
+<p>​	与芯片设计中工程师从放置晶体管到逻辑元件再到逻辑块的过程类似，神经网络结构的设计也逐渐变得更加抽象。研究人员开始从单个神经元的角度思考问题，发展到整个层次，现在又转向模块，重复各层的模式。</p>
+<p>​	使用块的想法首先出现在牛津大学的 <a href="http://www.robots.ox.ac.uk/~vgg/">视觉几何组（visualgeometry Group）</a> (VGG) 的 VGG 网络中。通过使用循环和子程序，可以很容易地在任何现代深度学习框架的代码中实现这些重复的结构。</p>
+<ul>
+<li>
+<p>VGG块</p>
+<p>​	经典卷积神经网络的基本组成部分是下面的这个序列： 1. 带填充以保持分辨率的卷积层； 1. 非线性激活函数，如ReLU； 1. 池化层，如最大池化层。而一个 VGG 块与之类似，由一系列卷积层组成，后面再加上用于空间下采样的最大池化层。在最初的 VGG 论文 [<a href="https://zh-v2.d2l.ai/chapter_references/zreferences.html#simonyan-zisserman-2014">Simonyan &amp; Zisserman, 2014]</a> 中，作者使用了带有 3×3 卷积核、填充为 1（保持高度和宽度）的卷积层，和带有 2×2 池化窗口、步幅为 2（每个块后的分辨率减半）的最大池化层。在下面的代码中，我们定义了一个名为 <code>vgg_block</code> 的函数来实现一个 VGG 块。</p>
+</li>
+<li>
+<p>VGG网络模型</p>
+<p>​	与 AlexNet、LeNet 一样，VGG 网络可以分为两部分：第一部分主要由卷积层和池化层组成，第二部分由全连接层组成。如下图所示</p>
+<figure data-type="image" tabindex="1"><a href="https://imgtu.com/i/2H0JVf"><img src="https://z3.ax1x.com/2021/06/15/2H0JVf.png" alt="2H0JVf.png" loading="lazy"></a></figure>
+</li>
+</ul>
+<p>​	原始 VGG 网络有 5 个卷积块，其中前两个块各有一个卷积层，后三个块各包含两个卷积层。 第	一个模块有 64 个输出通道，每个后续模块将输出通道数量翻倍，直到该数字达到 512。由于该网	络使用 8 个卷积层和 3 个全连接层，因此它通常被称为 VGG-11。</p>
+<p>​	总结如下：</p>
+<ol>
+<li>VGG-11 使用可复用的卷积块构造网络。不同的 VGG 模型可通过每个块中卷积层数量和输出通道数量的差异来定义。</li>
+<li>块的使用导致网络定义的非常简洁。使用块可以有效地设计复杂的网络。</li>
+<li>在VGG论文中，Simonyan和Ziserman尝试了各种架构。特别是他们发现深层且窄的卷积（即3×3）比较浅层且宽的卷积更有效。</li>
+</ol>
+<h2 id="2-感受野">2. 感受野</h2>
+<p>​	这里会涉及一个名为感受野（Receptive Field）的概念，它指的是卷积神经网络每一层输出的特征图（feature  map）上的像素点在输入图片上映射的区域大小。简而言之，就是特征图上的一点跟原有图上有关系的点的区域。一般取一个pixel为单位，而输入的感受野就是1即只对应其自身的那个像素。画图易知，两层3x3的卷积层所得到的感受野与一层5x5的卷积层的感受野相同，这也是VGG使用3x3小卷积核来代替的原理之一。</p>
+<h2 id="3-11-卷积核">3. 1*1 卷积核</h2>
+<p>​	虽然VGG所用的是2x2的卷积核，但是在上文提到了一些网络使用1x1的全卷积层代替全连接层，那么顺便就对1x1卷积核的作用做一个总结。</p>
+<ol>
+<li>如上文所述，使用卷积层就没有全连接层对输入尺寸的限制，这也方便了许多。</li>
+<li>全连接层会改变网络的空间结构，卷积层不会破坏图像的空间结构。一般要学习是相邻的边界等特征，而全连接毫无目的地将整张图“全连接”，换言之全连接输出的是一维向量，势必将丢失大量二维信息，这显然是不合适的。</li>
+<li>可以用于为决策增加非线性因素。</li>
+<li>一些模型用1x1的全连接层来调整网络维度。比如 MobileNet 使用 1x1 的卷积核来扩维，GoogleNet、ResNet 使用1x1的卷积核来降维。这里的降维类似于压缩处理，并不会影响训练结果，而1x1的卷积核可以使网络变薄，可以成倍地减少计算量。如下图所示，如果我们使用 naive 的 inception ，那么最后 concatenate 出来的特征图厚度会很大，而添加上 1x1 的卷积核之后就可以调整厚度了。</li>
+</ol>
+<h2 id="4-官方源码">4. 官方源码</h2>
+<pre><code class="language-python">import torch.nn as nn
+import math
+
+class VGG(nn.Module):
+
+    def __init__(self, features, num_classes=1000, init_weights=True):
+        super(VGG, self).__init__()
+        self.features = features
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),
+        )
+        if init_weights:
+            self._initialize_weights()
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                m.weight.data.normal_(0, 0.01)
+                m.bias.data.zero_()
+</code></pre>
+<p>​	因为VGG中卷积层的重复性比较高，所以官方使用一个函数来循环产生卷积层：</p>
+<pre><code class="language-python">def make_layers(cfg, batch_norm=False):
+    layers = []
+    in_channels = 3
+    for v in cfg:
+        if v == 'M':
+            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
+        else:
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
+            if batch_norm:
+                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
+            else:
+                layers += [conv2d, nn.ReLU(inplace=True)]
+            in_channels = v
+    return nn.Sequential(*layers)
+</code></pre>
+<p>​	接下来定义各个版本的卷积层，这里的“M”表示的是最大池化层。</p>
+<pre><code class="language-python">cfg = {
+    'A': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
+    'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
+}
+
+def vgg11(**kwargs):
+    model = VGG(make_layers(cfg['A']), **kwargs)
+    return model
+
+def vgg11_bn(**kwargs):
+    model = VGG(make_layers(cfg['A'], batch_norm=True), **kwargs)
+    return model
+
+def vgg13(**kwargs):
+    model = VGG(make_layers(cfg['B']), **kwargs)
+    return model
+
+def vgg13_bn(**kwargs):
+    model = VGG(make_layers(cfg['B'], batch_norm=True), **kwargs)
+    return model
+
+def vgg16(**kwargs):
+    model = VGG(make_layers(cfg['D']), **kwargs)
+    return model
+
+def vgg16_bn(**kwargs):
+    model = VGG(make_layers(cfg['D'], batch_norm=True), **kwargs)
+    return model
+
+def vgg19(**kwargs):
+    model = VGG(make_layers(cfg['E']), **kwargs)
+    return model
+
+def vgg19_bn(**kwargs):
+    model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
+    return model
+
+if __name__ == '__main__':
+    # 'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19_bn', 'vgg19'
+    # Example
+    net11 = vgg11()
+    print(net11)
+</code></pre>
+<h2 id="5-设计思路">5. 设计思路</h2>
+<p>​	通常在一些现实任务中，我们所能拿到的数据比较少，而深度学习模型的参数更新通常需要大量的数据来驱动，所以我们就可以对某些层用到预训练模型。对 VGG19 的预训练模型使用部分参数，按照源码设置响应参数：</p>
+<p>​</p>
+<pre><code class="language-python">		self.features = features
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),  # num_classes=1000
+        )
+
+</code></pre>
+<p>​	官方模型中，主要包括features，avgpool，还有classifier几个模块。features就是卷积模块用来提取特征，avgpool是自适应的平均池化层，classifier是包含全连接层的分类器。比如我现在只需要对80个类建立分类模型，那么我除了最后一个Linear的参数,其他都需要用到预训练模型参数。</p>
+<p>​	那么我的模型设置：</p>
+<pre><code class="language-python">		self.features = nn.Sequential(
+            # Layer 1
+            nn.Conv2d(3, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 2
+            nn.Conv2d(64, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 3
+            nn.Conv2d(128, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 4
+            nn.Conv2d(256, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 5
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2)
+        )
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512*7*7, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+        )
+        # 单独把最后一层提取出来
+        self.classifier2 = nn.Linear(4096, num_classes)
+
+</code></pre>
+
+      </div>
+      <a href="https://slow-motion.github.io/post/ruan-jian-she-ji-shuo-ming/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://slow-motion.github.io/post/ruan-jian-gong-cheng-da-zuo-ye/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          软件工程大作业
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-06-15</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        Introduce
+​	虽然 AlexNet 证明深层神经网络卓有成效，但它没有提供一个通用的模板来指导后续的研究人员设计新的网络。 在下面的几个章节中，我们将介绍一些常用于设计深层神经网络的启发式概念。
+​	与芯片设计中工程师从放置晶体管...
+      </div>
+      <a href="https://slow-motion.github.io/post/ruan-jian-gong-cheng-da-zuo-ye/" class="btn">
+        Read more
+      </a>
+    </div>
+    
+  </div>
+  
+      </div>
+
+      
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</footer>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://slow-motion.github.io/media/scripts/main.js"></script>
+</body>
+
 </html>

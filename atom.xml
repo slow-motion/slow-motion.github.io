@@ -1,15 +1,445 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://slow-motion.github.io</id>
-    <title>Gridea</title>
-    <updated>2021-06-15T08:24:28.268Z</updated>
+    <title>skykale</title>
+    <updated>2021-06-15T08:33:55.690Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://slow-motion.github.io"/>
     <link rel="self" href="https://slow-motion.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>随心而写</subtitle>
     <logo>https://slow-motion.github.io/images/avatar.png</logo>
     <icon>https://slow-motion.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, Gridea</rights>
+    <rights>All rights reserved 2021, skykale</rights>
+    <entry>
+        <title type="html"><![CDATA[VGG 网络利用迁移学习复现]]></title>
+        <id>https://slow-motion.github.io/post/ruan-jian-she-ji-shuo-ming/</id>
+        <link href="https://slow-motion.github.io/post/ruan-jian-she-ji-shuo-ming/">
+        </link>
+        <updated>2021-06-15T08:31:12.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="1-简介">1. 简介</h2>
+<p>​	虽然 AlexNet 证明深层神经网络卓有成效，但它没有提供一个通用的模板来指导后续的研究人员设计新的网络。 在下面的几个章节中，我们将介绍一些常用于设计深层神经网络的启发式概念。</p>
+<p>​	与芯片设计中工程师从放置晶体管到逻辑元件再到逻辑块的过程类似，神经网络结构的设计也逐渐变得更加抽象。研究人员开始从单个神经元的角度思考问题，发展到整个层次，现在又转向模块，重复各层的模式。</p>
+<p>​	使用块的想法首先出现在牛津大学的 <a href="http://www.robots.ox.ac.uk/~vgg/">视觉几何组（visualgeometry Group）</a> (VGG) 的 VGG 网络中。通过使用循环和子程序，可以很容易地在任何现代深度学习框架的代码中实现这些重复的结构。</p>
+<ul>
+<li>
+<p>VGG块</p>
+<p>​	经典卷积神经网络的基本组成部分是下面的这个序列： 1. 带填充以保持分辨率的卷积层； 1. 非线性激活函数，如ReLU； 1. 池化层，如最大池化层。而一个 VGG 块与之类似，由一系列卷积层组成，后面再加上用于空间下采样的最大池化层。在最初的 VGG 论文 [<a href="https://zh-v2.d2l.ai/chapter_references/zreferences.html#simonyan-zisserman-2014">Simonyan &amp; Zisserman, 2014]</a> 中，作者使用了带有 3×3 卷积核、填充为 1（保持高度和宽度）的卷积层，和带有 2×2 池化窗口、步幅为 2（每个块后的分辨率减半）的最大池化层。在下面的代码中，我们定义了一个名为 <code>vgg_block</code> 的函数来实现一个 VGG 块。</p>
+</li>
+<li>
+<p>VGG网络模型</p>
+<p>​	与 AlexNet、LeNet 一样，VGG 网络可以分为两部分：第一部分主要由卷积层和池化层组成，第二部分由全连接层组成。如下图所示</p>
+<figure data-type="image" tabindex="1"><a href="https://imgtu.com/i/2H0JVf"><img src="https://z3.ax1x.com/2021/06/15/2H0JVf.png" alt="2H0JVf.png" loading="lazy"></a></figure>
+</li>
+</ul>
+<p>​	原始 VGG 网络有 5 个卷积块，其中前两个块各有一个卷积层，后三个块各包含两个卷积层。 第	一个模块有 64 个输出通道，每个后续模块将输出通道数量翻倍，直到该数字达到 512。由于该网	络使用 8 个卷积层和 3 个全连接层，因此它通常被称为 VGG-11。</p>
+<p>​	总结如下：</p>
+<ol>
+<li>VGG-11 使用可复用的卷积块构造网络。不同的 VGG 模型可通过每个块中卷积层数量和输出通道数量的差异来定义。</li>
+<li>块的使用导致网络定义的非常简洁。使用块可以有效地设计复杂的网络。</li>
+<li>在VGG论文中，Simonyan和Ziserman尝试了各种架构。特别是他们发现深层且窄的卷积（即3×3）比较浅层且宽的卷积更有效。</li>
+</ol>
+<h2 id="2-感受野">2. 感受野</h2>
+<p>​	这里会涉及一个名为感受野（Receptive Field）的概念，它指的是卷积神经网络每一层输出的特征图（feature  map）上的像素点在输入图片上映射的区域大小。简而言之，就是特征图上的一点跟原有图上有关系的点的区域。一般取一个pixel为单位，而输入的感受野就是1即只对应其自身的那个像素。画图易知，两层3x3的卷积层所得到的感受野与一层5x5的卷积层的感受野相同，这也是VGG使用3x3小卷积核来代替的原理之一。</p>
+<h2 id="3-11-卷积核">3. 1*1 卷积核</h2>
+<p>​	虽然VGG所用的是2x2的卷积核，但是在上文提到了一些网络使用1x1的全卷积层代替全连接层，那么顺便就对1x1卷积核的作用做一个总结。</p>
+<ol>
+<li>如上文所述，使用卷积层就没有全连接层对输入尺寸的限制，这也方便了许多。</li>
+<li>全连接层会改变网络的空间结构，卷积层不会破坏图像的空间结构。一般要学习是相邻的边界等特征，而全连接毫无目的地将整张图“全连接”，换言之全连接输出的是一维向量，势必将丢失大量二维信息，这显然是不合适的。</li>
+<li>可以用于为决策增加非线性因素。</li>
+<li>一些模型用1x1的全连接层来调整网络维度。比如 MobileNet 使用 1x1 的卷积核来扩维，GoogleNet、ResNet 使用1x1的卷积核来降维。这里的降维类似于压缩处理，并不会影响训练结果，而1x1的卷积核可以使网络变薄，可以成倍地减少计算量。如下图所示，如果我们使用 naive 的 inception ，那么最后 concatenate 出来的特征图厚度会很大，而添加上 1x1 的卷积核之后就可以调整厚度了。</li>
+</ol>
+<h2 id="4-官方源码">4. 官方源码</h2>
+<pre><code class="language-python">import torch.nn as nn
+import math
+
+class VGG(nn.Module):
+
+    def __init__(self, features, num_classes=1000, init_weights=True):
+        super(VGG, self).__init__()
+        self.features = features
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),
+        )
+        if init_weights:
+            self._initialize_weights()
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                m.weight.data.normal_(0, 0.01)
+                m.bias.data.zero_()
+</code></pre>
+<p>​	因为VGG中卷积层的重复性比较高，所以官方使用一个函数来循环产生卷积层：</p>
+<pre><code class="language-python">def make_layers(cfg, batch_norm=False):
+    layers = []
+    in_channels = 3
+    for v in cfg:
+        if v == 'M':
+            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
+        else:
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
+            if batch_norm:
+                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
+            else:
+                layers += [conv2d, nn.ReLU(inplace=True)]
+            in_channels = v
+    return nn.Sequential(*layers)
+</code></pre>
+<p>​	接下来定义各个版本的卷积层，这里的“M”表示的是最大池化层。</p>
+<pre><code class="language-python">cfg = {
+    'A': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
+    'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
+}
+
+def vgg11(**kwargs):
+    model = VGG(make_layers(cfg['A']), **kwargs)
+    return model
+
+def vgg11_bn(**kwargs):
+    model = VGG(make_layers(cfg['A'], batch_norm=True), **kwargs)
+    return model
+
+def vgg13(**kwargs):
+    model = VGG(make_layers(cfg['B']), **kwargs)
+    return model
+
+def vgg13_bn(**kwargs):
+    model = VGG(make_layers(cfg['B'], batch_norm=True), **kwargs)
+    return model
+
+def vgg16(**kwargs):
+    model = VGG(make_layers(cfg['D']), **kwargs)
+    return model
+
+def vgg16_bn(**kwargs):
+    model = VGG(make_layers(cfg['D'], batch_norm=True), **kwargs)
+    return model
+
+def vgg19(**kwargs):
+    model = VGG(make_layers(cfg['E']), **kwargs)
+    return model
+
+def vgg19_bn(**kwargs):
+    model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
+    return model
+
+if __name__ == '__main__':
+    # 'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19_bn', 'vgg19'
+    # Example
+    net11 = vgg11()
+    print(net11)
+</code></pre>
+<h2 id="5-设计思路">5. 设计思路</h2>
+<p>​	通常在一些现实任务中，我们所能拿到的数据比较少，而深度学习模型的参数更新通常需要大量的数据来驱动，所以我们就可以对某些层用到预训练模型。对 VGG19 的预训练模型使用部分参数，按照源码设置响应参数：</p>
+<p>​</p>
+<pre><code class="language-python">		self.features = features
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),  # num_classes=1000
+        )
+
+</code></pre>
+<p>​	官方模型中，主要包括features，avgpool，还有classifier几个模块。features就是卷积模块用来提取特征，avgpool是自适应的平均池化层，classifier是包含全连接层的分类器。比如我现在只需要对80个类建立分类模型，那么我除了最后一个Linear的参数,其他都需要用到预训练模型参数。</p>
+<p>​	那么我的模型设置：</p>
+<pre><code class="language-python">		self.features = nn.Sequential(
+            # Layer 1
+            nn.Conv2d(3, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 2
+            nn.Conv2d(64, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 3
+            nn.Conv2d(128, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 4
+            nn.Conv2d(256, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 5
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2)
+        )
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512*7*7, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+        )
+        # 单独把最后一层提取出来
+        self.classifier2 = nn.Linear(4096, num_classes)
+
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="1-简介">1. 简介</h2>
+<p>​	虽然 AlexNet 证明深层神经网络卓有成效，但它没有提供一个通用的模板来指导后续的研究人员设计新的网络。 在下面的几个章节中，我们将介绍一些常用于设计深层神经网络的启发式概念。</p>
+<p>​	与芯片设计中工程师从放置晶体管到逻辑元件再到逻辑块的过程类似，神经网络结构的设计也逐渐变得更加抽象。研究人员开始从单个神经元的角度思考问题，发展到整个层次，现在又转向模块，重复各层的模式。</p>
+<p>​	使用块的想法首先出现在牛津大学的 <a href="http://www.robots.ox.ac.uk/~vgg/">视觉几何组（visualgeometry Group）</a> (VGG) 的 VGG 网络中。通过使用循环和子程序，可以很容易地在任何现代深度学习框架的代码中实现这些重复的结构。</p>
+<ul>
+<li>
+<p>VGG块</p>
+<p>​	经典卷积神经网络的基本组成部分是下面的这个序列： 1. 带填充以保持分辨率的卷积层； 1. 非线性激活函数，如ReLU； 1. 池化层，如最大池化层。而一个 VGG 块与之类似，由一系列卷积层组成，后面再加上用于空间下采样的最大池化层。在最初的 VGG 论文 [<a href="https://zh-v2.d2l.ai/chapter_references/zreferences.html#simonyan-zisserman-2014">Simonyan &amp; Zisserman, 2014]</a> 中，作者使用了带有 3×3 卷积核、填充为 1（保持高度和宽度）的卷积层，和带有 2×2 池化窗口、步幅为 2（每个块后的分辨率减半）的最大池化层。在下面的代码中，我们定义了一个名为 <code>vgg_block</code> 的函数来实现一个 VGG 块。</p>
+</li>
+<li>
+<p>VGG网络模型</p>
+<p>​	与 AlexNet、LeNet 一样，VGG 网络可以分为两部分：第一部分主要由卷积层和池化层组成，第二部分由全连接层组成。如下图所示</p>
+<figure data-type="image" tabindex="1"><a href="https://imgtu.com/i/2H0JVf"><img src="https://z3.ax1x.com/2021/06/15/2H0JVf.png" alt="2H0JVf.png" loading="lazy"></a></figure>
+</li>
+</ul>
+<p>​	原始 VGG 网络有 5 个卷积块，其中前两个块各有一个卷积层，后三个块各包含两个卷积层。 第	一个模块有 64 个输出通道，每个后续模块将输出通道数量翻倍，直到该数字达到 512。由于该网	络使用 8 个卷积层和 3 个全连接层，因此它通常被称为 VGG-11。</p>
+<p>​	总结如下：</p>
+<ol>
+<li>VGG-11 使用可复用的卷积块构造网络。不同的 VGG 模型可通过每个块中卷积层数量和输出通道数量的差异来定义。</li>
+<li>块的使用导致网络定义的非常简洁。使用块可以有效地设计复杂的网络。</li>
+<li>在VGG论文中，Simonyan和Ziserman尝试了各种架构。特别是他们发现深层且窄的卷积（即3×3）比较浅层且宽的卷积更有效。</li>
+</ol>
+<h2 id="2-感受野">2. 感受野</h2>
+<p>​	这里会涉及一个名为感受野（Receptive Field）的概念，它指的是卷积神经网络每一层输出的特征图（feature  map）上的像素点在输入图片上映射的区域大小。简而言之，就是特征图上的一点跟原有图上有关系的点的区域。一般取一个pixel为单位，而输入的感受野就是1即只对应其自身的那个像素。画图易知，两层3x3的卷积层所得到的感受野与一层5x5的卷积层的感受野相同，这也是VGG使用3x3小卷积核来代替的原理之一。</p>
+<h2 id="3-11-卷积核">3. 1*1 卷积核</h2>
+<p>​	虽然VGG所用的是2x2的卷积核，但是在上文提到了一些网络使用1x1的全卷积层代替全连接层，那么顺便就对1x1卷积核的作用做一个总结。</p>
+<ol>
+<li>如上文所述，使用卷积层就没有全连接层对输入尺寸的限制，这也方便了许多。</li>
+<li>全连接层会改变网络的空间结构，卷积层不会破坏图像的空间结构。一般要学习是相邻的边界等特征，而全连接毫无目的地将整张图“全连接”，换言之全连接输出的是一维向量，势必将丢失大量二维信息，这显然是不合适的。</li>
+<li>可以用于为决策增加非线性因素。</li>
+<li>一些模型用1x1的全连接层来调整网络维度。比如 MobileNet 使用 1x1 的卷积核来扩维，GoogleNet、ResNet 使用1x1的卷积核来降维。这里的降维类似于压缩处理，并不会影响训练结果，而1x1的卷积核可以使网络变薄，可以成倍地减少计算量。如下图所示，如果我们使用 naive 的 inception ，那么最后 concatenate 出来的特征图厚度会很大，而添加上 1x1 的卷积核之后就可以调整厚度了。</li>
+</ol>
+<h2 id="4-官方源码">4. 官方源码</h2>
+<pre><code class="language-python">import torch.nn as nn
+import math
+
+class VGG(nn.Module):
+
+    def __init__(self, features, num_classes=1000, init_weights=True):
+        super(VGG, self).__init__()
+        self.features = features
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),
+        )
+        if init_weights:
+            self._initialize_weights()
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                m.weight.data.normal_(0, 0.01)
+                m.bias.data.zero_()
+</code></pre>
+<p>​	因为VGG中卷积层的重复性比较高，所以官方使用一个函数来循环产生卷积层：</p>
+<pre><code class="language-python">def make_layers(cfg, batch_norm=False):
+    layers = []
+    in_channels = 3
+    for v in cfg:
+        if v == 'M':
+            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
+        else:
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
+            if batch_norm:
+                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
+            else:
+                layers += [conv2d, nn.ReLU(inplace=True)]
+            in_channels = v
+    return nn.Sequential(*layers)
+</code></pre>
+<p>​	接下来定义各个版本的卷积层，这里的“M”表示的是最大池化层。</p>
+<pre><code class="language-python">cfg = {
+    'A': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
+    'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
+    'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
+}
+
+def vgg11(**kwargs):
+    model = VGG(make_layers(cfg['A']), **kwargs)
+    return model
+
+def vgg11_bn(**kwargs):
+    model = VGG(make_layers(cfg['A'], batch_norm=True), **kwargs)
+    return model
+
+def vgg13(**kwargs):
+    model = VGG(make_layers(cfg['B']), **kwargs)
+    return model
+
+def vgg13_bn(**kwargs):
+    model = VGG(make_layers(cfg['B'], batch_norm=True), **kwargs)
+    return model
+
+def vgg16(**kwargs):
+    model = VGG(make_layers(cfg['D']), **kwargs)
+    return model
+
+def vgg16_bn(**kwargs):
+    model = VGG(make_layers(cfg['D'], batch_norm=True), **kwargs)
+    return model
+
+def vgg19(**kwargs):
+    model = VGG(make_layers(cfg['E']), **kwargs)
+    return model
+
+def vgg19_bn(**kwargs):
+    model = VGG(make_layers(cfg['E'], batch_norm=True), **kwargs)
+    return model
+
+if __name__ == '__main__':
+    # 'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19_bn', 'vgg19'
+    # Example
+    net11 = vgg11()
+    print(net11)
+</code></pre>
+<h2 id="5-设计思路">5. 设计思路</h2>
+<p>​	通常在一些现实任务中，我们所能拿到的数据比较少，而深度学习模型的参数更新通常需要大量的数据来驱动，所以我们就可以对某些层用到预训练模型。对 VGG19 的预训练模型使用部分参数，按照源码设置响应参数：</p>
+<p>​</p>
+<pre><code class="language-python">		self.features = features
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),  # num_classes=1000
+        )
+
+</code></pre>
+<p>​	官方模型中，主要包括features，avgpool，还有classifier几个模块。features就是卷积模块用来提取特征，avgpool是自适应的平均池化层，classifier是包含全连接层的分类器。比如我现在只需要对80个类建立分类模型，那么我除了最后一个Linear的参数,其他都需要用到预训练模型参数。</p>
+<p>​	那么我的模型设置：</p>
+<pre><code class="language-python">		self.features = nn.Sequential(
+            # Layer 1
+            nn.Conv2d(3, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 2
+            nn.Conv2d(64, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128, 128, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 3
+            nn.Conv2d(128, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 4
+            nn.Conv2d(256, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2),
+            # Layer 5
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2, stride=2)
+        )
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.classifier = nn.Sequential(
+            nn.Linear(512*7*7, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+        )
+        # 单独把最后一层提取出来
+        self.classifier2 = nn.Linear(4096, num_classes)
+
+</code></pre>
+<!-- more -->
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[软件工程大作业]]></title>
         <id>https://slow-motion.github.io/post/ruan-jian-gong-cheng-da-zuo-ye/</id>
